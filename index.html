@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUSCLE FINANCIAL ADVISOR PRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DotGothic16&family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #03050a;
+            --bg-card: #080d15;
+            --bg-card2: #0a1020;
+            --accent-green: #00ff88;
+            --accent-red: #ff3b5c;
+            --accent-gold: #ffd700;
+            --accent-blue: #00aaff;
+            --text-main: #e8f0fe;
+            --text-muted: #4a5568;
+            --text-dim: #8896a8;
+            --border: #1a2535;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridScroll 20s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gridScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 40px; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px 16px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* HEADER */
+        header {
+            text-align: center;
+            padding: 40px 0 32px;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            display: block;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+            margin-top: 28px;
+        }
+
+        .header-eyebrow {
+            font-family: 'DotGothic16', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.3em;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .header-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(42px, 8vw, 76px);
+            letter-spacing: 0.05em;
+            line-height: 0.95;
+            color: #fff;
+            text-shadow: 0 0 40px rgba(0,255,136,0.15), 0 0 80px rgba(0,255,136,0.05);
+        }
+
+        .header-title span {
+            color: var(--accent-green);
+            -webkit-text-stroke: 1px var(--accent-green);
+        }
+
+        .header-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 12px;
+            letter-spacing: 0.1em;
+        }
+
+        /* GRID LAYOUT */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+        }
+
+        .card.green-top::before { background: linear-gradient(90deg, transparent, var(--accent-green), transparent); }
+        .card.blue-top::before { background: linear-gradient(90deg, transparent, var(--accent-blue), transparent); }
+        .card.gold-top::before { background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); }
+        .card.red-top::before { background: linear-gradient(90deg, transparent, var(--accent-red), transparent); }
+
+        .card-label {
+            font-family: 'DotGothic16', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-label.green { color: var(--accent-green); }
+        .card-label.blue { color: var(--accent-blue); }
+        .card-label.gold { color: var(--accent-gold); }
+
+        /* INPUT GROUPS */
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        .input-group:last-child { margin-bottom: 0; }
+
+        .input-label {
+            display: block;
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+            letter-spacing: 0.05em;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #050a14;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0 12px;
+            transition: border-color 0.2s;
+        }
+
+        .input-row:focus-within {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 1px rgba(0,255,136,0.1);
+        }
+
+        .input-unit {
+            font-size: 11px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .input-field {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--accent-green);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 0.05em;
+            padding: 10px 0;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .input-field::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+        /* HERO METRIC */
+        .hero-card {
+            background: linear-gradient(135deg, #030b12, #071220);
+            border: 1px solid rgba(0,255,136,0.2);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            grid-column: span 2;
+        }
+
+        @media (max-width: 600px) {
+            .hero-card { grid-column: span 1; }
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.06), transparent 60%);
+        }
+
+        .hero-label {
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .hero-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(52px, 10vw, 88px);
+            color: var(--accent-green);
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(0,255,136,0.4);
+            letter-spacing: 0.02em;
+            transition: all 0.3s ease;
+        }
+
+        .hero-value.negative { color: var(--accent-red); text-shadow: 0 0 30px rgba(255,59,92,0.4); }
+
+        .hero-currency {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            color: var(--accent-green);
+            opacity: 0.6;
+            vertical-align: top;
+            margin-top: 14px;
+            display: inline-block;
+        }
+
+        .hero-currency.negative { color: var(--accent-red); }
+
+        .hero-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* PAYBACK BADGE */
+        .payback-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,215,0,0.08);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 100px;
+            padding: 6px 16px;
+            margin-top: 16px;
+        }
+
+        .payback-badge-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .payback-badge-text {
+            font-family: 'DotGothic16', sans-serif;
+            font-size: 11px;
+            color: var(--accent-gold);
+            letter-spacing: 0.1em;
+        }
+
+        /* KPI METRICS */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .kpi-item {
+            background: #050a14;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .kpi-label {
+            font-size: 9px;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .kpi-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 22px;
+            letter-spacing: 0.05em;
+        }
+
+        .kpi-value.green { color: var(--accent-green); }
+        .kpi-value.blue { color: var(--accent-blue); }
+        .kpi-value.gold { color: var(--accent-gold); }
+        .kpi-value.red { color: var(--accent-red); }
+
+        .kpi-unit {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-left: 2px;
+        }
+
+        /* RATING */
+        .rating-card {
+            grid-column: span 2;
+            background: var(--bg-card2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .rating-card { grid-column: span 1; flex-direction: column; text-align: center; }
+        }
+
+        .rating-icon {
+            font-size: 36px;
+            flex-shrink: 0;
+        }
+
+        .rating-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            color: var(--accent-gold);
+            letter-spacing: 0.1em;
+        }
+
+        .rating-desc {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 4px;
+            line-height: 1.6;
+        }
+
+        /* BREAKDOWN TABLE */
+        .breakdown {
+            margin-top: 16px;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+        }
+
+        .breakdown-row:last-child { border-bottom: none; }
+
+        .breakdown-label { color: var(--text-dim); }
+        .breakdown-value { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.05em; }
+
+        /* PROGRESS BAR */
+        .progress-wrap {
+            margin-top: 12px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--accent-green), #00ffcc);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* DISCLAIMER */
+        .disclaimer {
+            text-align: center;
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 32px;
+            line-height: 1.8;
+            padding: 0 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <header>
+            <p class="header-eyebrow">v2.0 — 資本主義的筋肉経済学</p>
+            <h1 class="header-title">MUSCLE<br><span>FINANCIAL</span><br>ADVISOR</h1>
+            <p class="header-sub">筋肉への投資を、貸借対照表で読み解く</p>
+        </header>
+
+        <div class="main-grid">
+
+            <!-- 入力：コスト・PL設定 -->
+            <div class="card green-top">
+                <div class="card-label green">【P&L】損益設定</div>
+
+                <div class="input-group">
+                    <span class="input-label">月間ジム・プロテイン代</span>
+                    <div class="input-row">
+                        <input type="number" id="monthly-cost" value="12000" class="input-field" oninput="calculate()">
+                        <span class="input-unit">円 / 月</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-label">ベンチプレス目標重量</span>
+                    <div class="input-row">
+                        <input type="number" id="bench-press" value="80" class="input-field" oninput="calculate()">
+                        <span class="input-unit">kg</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 入力：資産・BS設定 -->
+            <div class="card blue-top">
+                <div class="card-label blue">【B/S】資産基礎設定</div>
+
+                <div class="input-group">
+                    <span class="input-label">現在の年齢</span>
+                    <div class="input-row">
+                        <input type="number" id="age" value="30" class="input-field" oninput="calculate()">
+                        <span class="input-unit">歳</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-label">筋肉増量目標</span>
+                    <div class="input-row">
+                        <input type="number" id="muscle-kg" value="3" class="input-field" oninput="calculate()">
+                        <span class="input-unit">kg</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ヒーロー指標：生涯純利益 -->
+            <div class="hero-card">
+                <p class="hero-label">純・生涯マッスル利益（コスト控除後）</p>
+                <div>
+                    <span class="hero-currency" id="hero-currency">¥</span>
+                    <span class="hero-value" id="net-profit">0</span>
+                </div>
+                <p class="hero-sub">健康寿命85歳まで・全コスト差引後</p>
+                <div class="payback-badge">
+                    <div class="payback-badge-dot"></div>
+                    <span class="payback-badge-text">投資回収期間：<span id="payback-period">--</span></span>
+                </div>
+            </div>
+
+            <!-- KPI 指標 -->
+            <div class="card gold-top">
+                <div class="card-label gold">【KPI】能力評価指標</div>
+                <div class="kpi-grid">
+                    <div class="kpi-item">
+                        <div class="kpi-label">年収UPボーナス推計</div>
+                        <div class="kpi-value blue">¥<span id="salary-up">0</span><span class="kpi-unit">/年</span></div>
+                    </div>
+                    <div class="kpi-item">
+                        <div class="kpi-label">1レップあたりの単価</div>
+                        <div class="kpi-value green">¥<span id="rep-value">0</span><span class="kpi-unit">/回</span></div>
+                    </div>
+                    <div class="kpi-item">
+                        <div class="kpi-label">年間グロス利益</div>
+                        <div class="kpi-value gold">¥<span id="gross-annual">0</span><span class="kpi-unit">/年</span></div>
+                    </div>
+                    <div class="kpi-item">
+                        <div class="kpi-label">年間ランニングコスト</div>
+                        <div class="kpi-value red">¥<span id="annual-cost">0</span><span class="kpi-unit">/年</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 損益内訳 -->
+            <div class="card">
+                <div class="card-label">【詳細】損益内訳</div>
+
+                <div class="breakdown">
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">筋肉資産価値（年間）</span>
+                        <span class="breakdown-value" style="color:var(--accent-green)">+¥<span id="b-muscle">0</span></span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">ベンチ相関ボーナス（年間）</span>
+                        <span class="breakdown-value" style="color:var(--accent-blue)">+¥<span id="b-bench">0</span></span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">ランニングコスト（年間）</span>
+                        <span class="breakdown-value" style="color:var(--accent-red)">-¥<span id="b-cost">0</span></span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span class="breakdown-label">投資可能期間</span>
+                        <span class="breakdown-value" style="color:#aaa"><span id="b-years">0</span>年</span>
+                    </div>
+                </div>
+
+                <div class="progress-wrap">
+                    <div class="progress-label">
+                        <span>利益率（収益 vs コスト比）</span>
+                        <span id="profit-ratio">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 格付け -->
+            <div class="rating-card">
+                <div class="rating-icon" id="rating-icon">🏋️</div>
+                <div>
+                    <div class="rating-title" id="rating-title">MUSCLE ANALYST</div>
+                    <div class="rating-desc" id="rating-desc">数値を入力してマッスル格付けを取得してください。</div>
+                </div>
+            </div>
+
+        </div>
+
+        <p class="disclaimer">
+            ※ 本ツールはエンターテインメント目的です。<br>
+            「筋肉1kg＝年間5万円価値」はFPの仮説モデル（基礎代謝向上・医療費削減・生産性UPの合算推計）に基づきます。<br>
+            実際の投資判断には専門家にご相談ください。ただし筋肉は裏切りません。
+        </p>
+
+    </div>
+
+    <script>
+        function fmt(n) {
+            return Math.abs(Math.round(n)).toLocaleString('ja-JP');
+        }
+
+        function calculate() {
+            const age         = parseFloat(document.getElementById('age').value)         || 0;
+            const muscleKg    = parseFloat(document.getElementById('muscle-kg').value)    || 0;
+            const monthlyCost = parseFloat(document.getElementById('monthly-cost').value) || 0;
+            const benchKg     = parseFloat(document.getElementById('bench-press').value)  || 0;
+
+            const healthYears = Math.max(0, 85 - age);
+
+            // 収益計算
+            const muscleAnnual   = muscleKg * 50000;                             // 1kg = 5万円/年
+            const benchBonus     = Math.max(0, benchKg - 60) * 1000;             // 60kg超：1kg=1000円/年
+            const grossAnnual    = muscleAnnual + benchBonus;
+
+            // コスト計算
+            const annualCost     = monthlyCost * 12;
+            const netAnnual      = grossAnnual - annualCost;
+
+            // 生涯利益
+            const lifetimeNet    = netAnnual * healthYears;
+
+            // 投資回収期間
+            const monthlyGross   = grossAnnual / 12;
+            let paybackText;
+            if (monthlyCost <= 0) {
+                paybackText = "コスト0 — 即回収";
+            } else if (monthlyGross <= monthlyCost) {
+                paybackText = "回収不能（コスト過多）";
+            } else {
+                const months = monthlyCost / (monthlyGross - monthlyCost);
+                if (months < 1) {
+                    paybackText = `約${(months * 30).toFixed(0)}日で回収完了`;
+                } else {
+                    paybackText = `約${months.toFixed(1)}ヶ月で回収完了`;
+                }
+            }
+
+            // 1レップ換算（年3000レップ想定）
+            const repValue = grossAnnual > 0 ? (grossAnnual / 3000) : 0;
+
+            // 利益率
+            const ratio = annualCost > 0 ? Math.min(100, Math.max(0, (netAnnual / grossAnnual) * 100)) : 100;
+
+            // --- DOM更新 ---
+            const heroVal  = document.getElementById('net-profit');
+            const heroCur  = document.getElementById('hero-currency');
+
+            heroVal.innerText = fmt(lifetimeNet);
+            if (lifetimeNet < 0) {
+                heroVal.classList.add('negative');
+                heroCur.classList.add('negative');
+            } else {
+                heroVal.classList.remove('negative');
+                heroCur.classList.remove('negative');
+            }
+
+            document.getElementById('payback-period').innerText = paybackText;
+            document.getElementById('salary-up').innerText      = fmt(benchBonus);
+            document.getElementById('rep-value').innerText      = repValue.toFixed(1);
+            document.getElementById('gross-annual').innerText   = fmt(grossAnnual);
+            document.getElementById('annual-cost').innerText    = fmt(annualCost);
+
+            document.getElementById('b-muscle').innerText  = fmt(muscleAnnual);
+            document.getElementById('b-bench').innerText   = fmt(benchBonus);
+            document.getElementById('b-cost').innerText    = fmt(annualCost);
+            document.getElementById('b-years').innerText   = healthYears;
+            document.getElementById('profit-ratio').innerText = ratio.toFixed(0) + '%';
+            document.getElementById('progress-fill').style.width = ratio + '%';
+
+            // 格付けロジック
+            const { icon, title, desc } = getRating(lifetimeNet, ratio, benchKg, healthYears);
+            document.getElementById('rating-icon').innerText = icon;
+            document.getElementById('rating-title').innerText = title;
+            document.getElementById('rating-desc').innerText = desc;
+        }
+
+        function getRating(lifetimeNet, ratio, bench, years) {
+            if (lifetimeNet > 50000000) return {
+                icon: '🦁',
+                title: 'MUSCLE BUFFETT — S+格',
+                desc: '生涯5000万超の筋肉資産。あなたはウォーレン・バフェットを超えた。筋肉市場の神話となれ。'
+            };
+            if (lifetimeNet > 20000000) return {
+                icon: '🚀',
+                title: 'IRON TITAN — Sランク',
+                desc: '2000万超の純利益。機関投資家が嫉妬するROI。あなたの三角筋はナスダックより強い。'
+            };
+            if (lifetimeNet > 5000000) return {
+                icon: '💎',
+                title: 'PLATINUM LIFTER — Aランク',
+                desc: '健全な筋肉投資ポートフォリオ。コストを超える価値を持続的に生み出している。'
+            };
+            if (lifetimeNet > 0) return {
+                icon: '📈',
+                title: 'MUSCLE INVESTOR — Bランク',
+                desc: 'プラス収益を確保中。しかし伸び代がある。重量を上げ、コストを最適化せよ。'
+            };
+            if (lifetimeNet > -1000000) return {
+                icon: '⚠️',
+                title: 'BREAK-EVEN ATHLETE — Cランク',
+                desc: 'ほぼ損益分岐点。わずかな改善でプラスに転じる。プロテインの銘柄を見直せ。'
+            };
+            return {
+                icon: '🔥',
+                title: 'COST BURNING MACHINE — D格',
+                desc: 'コストが収益を上回っている。ジムの月額を下げるか、増量ペースを上げることを推奨。'
+            };
+        }
+
+        calculate();
+    </script>
+</body>
+</html>
