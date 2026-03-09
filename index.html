@@ -1,690 +1,1244 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUSCLE FINANCIAL ADVISOR PRO</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DotGothic16&family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-base: #03050a;
-            --bg-card: #080d15;
-            --bg-card2: #0a1020;
-            --accent-green: #00ff88;
-            --accent-red: #ff3b5c;
-            --accent-gold: #ffd700;
-            --accent-blue: #00aaff;
-            --text-main: #e8f0fe;
-            --text-muted: #4a5568;
-            --text-dim: #8896a8;
-            --border: #1a2535;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BODYWEIGHT FINANCIAL ADVISOR</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: #f5f0e8;
+    color: #1a1612;
+    min-height: 100vh;
+    padding: 32px 20px 80px;
+}
 
-        body {
-            font-family: 'Noto Sans JP', sans-serif;
-            background: var(--bg-base);
-            color: var(--text-main);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+.page { max-width: 900px; margin: 0 auto; }
 
-        /* Animated background grid */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridScroll 20s linear infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
+/* ── TABS ── */
+.tab-bar {
+    display: flex;
+    gap: 0;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #1a1612;
+}
 
-        @keyframes gridScroll {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 40px; }
-        }
+.tab-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    color: #7a6e62;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.15s;
+}
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 24px 16px 60px;
-            position: relative;
-            z-index: 1;
-        }
+.tab-btn:hover { color: #1a1612; }
+.tab-btn.active {
+    color: #1a1612;
+    border-bottom-color: #c0392b;
+    font-weight: 700;
+}
 
-        /* HEADER */
-        header {
-            text-align: center;
-            padding: 40px 0 32px;
-            position: relative;
-        }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
 
-        header::after {
-            content: '';
-            display: block;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
-            margin-top: 28px;
-        }
+/* ── HEADER ── */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #1a1612;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
 
-        .header-eyebrow {
-            font-family: 'DotGothic16', sans-serif;
-            font-size: 11px;
-            letter-spacing: 0.3em;
-            color: var(--accent-green);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            opacity: 0.8;
-        }
+.eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: #c0392b;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
 
-        .header-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(42px, 8vw, 76px);
-            letter-spacing: 0.05em;
-            line-height: 0.95;
-            color: #fff;
-            text-shadow: 0 0 40px rgba(0,255,136,0.15), 0 0 80px rgba(0,255,136,0.05);
-        }
+h1 {
+    font-family: 'Black Ops One', cursive;
+    font-size: clamp(28px, 5.5vw, 52px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+}
 
-        .header-title span {
-            color: var(--accent-green);
-            -webkit-text-stroke: 1px var(--accent-green);
-        }
+h1 em { font-style: normal; color: #c0392b; }
 
-        .header-sub {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 12px;
-            letter-spacing: 0.1em;
-        }
+.tagline { font-size: 11px; color: #7a6e62; margin-top: 8px; letter-spacing: 0.06em; }
 
-        /* GRID LAYOUT */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
+.header-badge {
+    background: #1a1612;
+    color: #f5f0e8;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    padding: 10px 16px;
+    text-align: center;
+    line-height: 2.2;
+    flex-shrink: 0;
+}
 
-        @media (max-width: 600px) {
-            .main-grid { grid-template-columns: 1fr; }
-        }
+/* ── GRIDS ── */
+.row2    { display: grid; grid-template-columns: 1fr 1fr;     gap: 16px; margin-bottom: 16px; }
+.row3    { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.row2kpi { display: grid; grid-template-columns: 1fr 1fr;     gap: 16px; margin-bottom: 16px; }
 
-        /* CARDS */
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-        }
+@media (max-width: 640px) {
+    .row2, .row2kpi, .row3 { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; }
+}
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-        }
+.mb16 { margin-bottom: 16px; }
 
-        .card.green-top::before { background: linear-gradient(90deg, transparent, var(--accent-green), transparent); }
-        .card.blue-top::before { background: linear-gradient(90deg, transparent, var(--accent-blue), transparent); }
-        .card.gold-top::before { background: linear-gradient(90deg, transparent, var(--accent-gold), transparent); }
-        .card.red-top::before { background: linear-gradient(90deg, transparent, var(--accent-red), transparent); }
+/* ── CARD ── */
+.card {
+    background: #fff;
+    border: 1.5px solid #c8bfb0;
+    border-radius: 4px;
+    padding: 18px 20px;
+    box-shadow: 3px 3px 0 rgba(26,22,18,0.09);
+}
 
-        .card-label {
-            font-family: 'DotGothic16', sans-serif;
-            font-size: 10px;
-            letter-spacing: 0.2em;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-bottom: 14px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
+.card-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: #7a6e62;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e0d9cc;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        .card-label.green { color: var(--accent-green); }
-        .card-label.blue { color: var(--accent-blue); }
-        .card-label.gold { color: var(--accent-gold); }
+.card-title::before {
+    content: '';
+    display: block;
+    width: 8px; height: 8px;
+    background: #c0392b;
+    flex-shrink: 0;
+}
 
-        /* INPUT GROUPS */
-        .input-group {
-            margin-bottom: 14px;
-        }
+/* ── INPUTS ── */
+.field { margin-bottom: 13px; }
 
-        .input-group:last-child { margin-bottom: 0; }
+.field-label {
+    display: block;
+    font-size: 10px;
+    color: #7a6e62;
+    letter-spacing: 0.08em;
+    margin-bottom: 5px;
+}
 
-        .input-label {
-            display: block;
-            font-size: 10px;
-            color: var(--text-dim);
-            margin-bottom: 6px;
-            letter-spacing: 0.05em;
-        }
+.field-row {
+    display: flex;
+    align-items: stretch;
+    border: 1.5px solid #c8bfb0;
+    border-radius: 3px;
+    transition: border-color 0.15s;
+}
 
-        .input-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #050a14;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 0 12px;
-            transition: border-color 0.2s;
-        }
+.field-row:focus-within { border-color: #1a1612; }
 
-        .input-row:focus-within {
-            border-color: var(--accent-green);
-            box-shadow: 0 0 0 1px rgba(0,255,136,0.1);
-        }
+.field-input {
+    flex: 1; border: none; outline: none;
+    background: #ede8de;
+    font-family: 'Black Ops One', cursive;
+    font-size: 24px; color: #1a1612;
+    padding: 8px 12px; min-width: 0;
+    border-radius: 3px 0 0 3px;
+}
 
-        .input-unit {
-            font-size: 11px;
-            color: var(--text-muted);
-            white-space: nowrap;
-        }
+.field-input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
-        .input-field {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--accent-green);
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 22px;
-            letter-spacing: 0.05em;
-            padding: 10px 0;
-            width: 100%;
-            min-width: 0;
-        }
+.field-unit {
+    background: #e0d9cc;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: #7a6e62;
+    padding: 0 12px;
+    display: flex; align-items: center;
+    border-left: 1px solid #c8bfb0;
+    white-space: nowrap;
+    border-radius: 0 3px 3px 0;
+}
 
-        .input-field::-webkit-inner-spin-button { -webkit-appearance: none; }
+.cost-note {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: #2d6a4f;
+    margin-top: 10px; padding: 7px 10px;
+    background: #d0e8dc;
+    border-left: 3px solid #2d6a4f;
+    border-radius: 2px; line-height: 1.6;
+}
 
-        /* HERO METRIC */
-        .hero-card {
-            background: linear-gradient(135deg, #030b12, #071220);
-            border: 1px solid rgba(0,255,136,0.2);
-            border-radius: 16px;
-            padding: 28px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            grid-column: span 2;
-        }
+/* ── HERO ── */
+.hero {
+    background: #1a1612;
+    color: #f5f0e8;
+    border-radius: 4px;
+    padding: 28px 24px 22px;
+    position: relative;
+}
 
-        @media (max-width: 600px) {
-            .hero-card { grid-column: span 1; }
-        }
+.hero-watermark {
+    position: absolute; right: 10px; bottom: -10px;
+    font-family: 'Black Ops One', cursive;
+    font-size: 130px;
+    color: rgba(255,255,255,0.04);
+    line-height: 1; pointer-events: none; user-select: none;
+}
 
-        .hero-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.06), transparent 60%);
-        }
+.hero-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    color: rgba(245,240,232,0.45);
+    text-transform: uppercase; margin-bottom: 8px;
+}
 
-        .hero-label {
-            font-size: 11px;
-            color: var(--text-dim);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
+.hero-number {
+    font-family: 'Black Ops One', cursive;
+    font-size: clamp(40px, 7.5vw, 66px);
+    letter-spacing: 0.02em; line-height: 1;
+    color: #fff; transition: color 0.3s; word-break: break-all;
+}
 
-        .hero-value {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(52px, 10vw, 88px);
-            color: var(--accent-green);
-            line-height: 1;
-            text-shadow: 0 0 30px rgba(0,255,136,0.4);
-            letter-spacing: 0.02em;
-            transition: all 0.3s ease;
-        }
+.hero-number.loss { color: #ff6b5b; }
+.hero-number.gain { color: #6dffb5; }
 
-        .hero-value.negative { color: var(--accent-red); text-shadow: 0 0 30px rgba(255,59,92,0.4); }
+.hero-unit {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: rgba(245,240,232,0.40); margin-top: 6px;
+}
 
-        .hero-currency {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 32px;
-            color: var(--accent-green);
-            opacity: 0.6;
-            vertical-align: top;
-            margin-top: 14px;
-            display: inline-block;
-        }
+.payback-row {
+    margin-top: 18px; padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
 
-        .hero-currency.negative { color: var(--accent-red); }
+.payback-label { font-size: 10px; color: rgba(245,240,232,0.4); white-space: nowrap; }
 
-        .hero-sub {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 8px;
-        }
+.payback-pill {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 100px; padding: 5px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; color: #ffd580; letter-spacing: 0.06em;
+}
 
-        /* PAYBACK BADGE */
-        .payback-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,215,0,0.08);
-            border: 1px solid rgba(255,215,0,0.2);
-            border-radius: 100px;
-            padding: 6px 16px;
-            margin-top: 16px;
-        }
+/* ── EXERCISE CARDS ── */
+.ex-card {
+    background: #ede8de;
+    border: 1.5px solid #c8bfb0;
+    border-radius: 4px; padding: 16px;
+    display: flex; flex-direction: column; gap: 8px;
+}
 
-        .payback-badge-dot {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--accent-gold);
-            animation: pulse 1.5s infinite;
-        }
+.ex-header { display: flex; align-items: center; gap: 10px; }
+.ex-icon { font-size: 24px; line-height: 1; flex-shrink: 0; }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
+.ex-name-ja { font-size: 14px; font-weight: 900; color: #1a1612; line-height: 1.2; }
+.ex-name-en { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: #7a6e62; letter-spacing: 0.1em; text-transform: uppercase; }
 
-        .payback-badge-text {
-            font-family: 'DotGothic16', sans-serif;
-            font-size: 11px;
-            color: var(--accent-gold);
-            letter-spacing: 0.1em;
-        }
+.ex-target { font-size: 10px; color: #3d352a; background: #e0d9cc; padding: 3px 8px; border-radius: 2px; width: fit-content; }
+.ex-tip    { font-size: 10px; color: #3d352a; line-height: 1.7; border-left: 2px solid #c8bfb0; padding-left: 8px; }
+.ex-goal   { font-size: 10px; color: #7a6e62; }
+.ex-goal span { font-family: 'Share Tech Mono', monospace; color: #b8650a; font-size: 10px; }
 
-        /* KPI METRICS */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+.ex-input-row {
+    display: flex; align-items: stretch;
+    border: 1.5px solid #c8bfb0; border-radius: 3px; transition: border-color 0.15s;
+}
 
-        .kpi-item {
-            background: #050a14;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px;
-        }
+.ex-input-row:focus-within { border-color: #1a1612; }
 
-        .kpi-label {
-            font-size: 9px;
-            color: var(--text-muted);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
+.ex-input {
+    flex: 1; border: none; outline: none; background: #fff;
+    font-family: 'Black Ops One', cursive;
+    font-size: 22px; color: #1a1612;
+    padding: 7px 10px; min-width: 0; border-radius: 3px 0 0 3px;
+}
 
-        .kpi-value {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 22px;
-            letter-spacing: 0.05em;
-        }
+.ex-input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
-        .kpi-value.green { color: var(--accent-green); }
-        .kpi-value.blue { color: var(--accent-blue); }
-        .kpi-value.gold { color: var(--accent-gold); }
-        .kpi-value.red { color: var(--accent-red); }
+.ex-unit {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; color: #7a6e62;
+    padding: 0 8px; background: #e0d9cc;
+    border-left: 1px solid #c8bfb0;
+    display: flex; align-items: center;
+    white-space: nowrap; border-radius: 0 3px 3px 0;
+}
 
-        .kpi-unit {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-left: 2px;
-        }
+.ex-bonus { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: #2d6a4f; font-weight: bold; }
 
-        /* RATING */
-        .rating-card {
-            grid-column: span 2;
-            background: var(--bg-card2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+/* ── KPI ── */
+.kpi {
+    background: #fff;
+    border: 1.5px solid #c8bfb0;
+    border-radius: 4px; padding: 14px 16px;
+    box-shadow: 2px 2px 0 rgba(26,22,18,0.09);
+}
 
-        @media (max-width: 600px) {
-            .rating-card { grid-column: span 1; flex-direction: column; text-align: center; }
-        }
+.kpi-label { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.15em; color: #7a6e62; text-transform: uppercase; margin-bottom: 6px; }
+.kpi-val   { font-family: 'Black Ops One', cursive; font-size: 22px; letter-spacing: 0.03em; line-height: 1; }
+.kpi-val.red   { color: #c0392b; }
+.kpi-val.amber { color: #b8650a; }
+.kpi-val.green { color: #2d6a4f; }
+.kpi-val.blue  { color: #1a4a7a; }
+.kpi-sub { font-size: 10px; color: #7a6e62; margin-top: 3px; }
 
-        .rating-icon {
-            font-size: 36px;
-            flex-shrink: 0;
-        }
+/* ── TABLE ── */
+.breakdown-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.breakdown-table tr { border-bottom: 1px solid #ede8de; }
+.breakdown-table tr.total-row { border-top: 2px solid #1a1612; border-bottom: none; font-weight: 700; }
+.breakdown-table td { padding: 8px 4px; color: #3d352a; }
+.breakdown-table td:last-child { text-align: right; font-family: 'Share Tech Mono', monospace; font-size: 13px; letter-spacing: 0.04em; }
+.t-green { color: #2d6a4f !important; }
+.t-red   { color: #c0392b !important; }
+.t-blue  { color: #1a4a7a !important; }
 
-        .rating-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 20px;
-            color: var(--accent-gold);
-            letter-spacing: 0.1em;
-        }
+/* ── BARS ── */
+.bar-head { display: flex; justify-content: space-between; font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #7a6e62; margin-bottom: 6px; }
+.bar-track { height: 6px; background: #e0d9cc; border-radius: 3px; }
+.bar-fill  { height: 100%; background: #2d6a4f; border-radius: 3px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+.bar-fill.danger { background: #c0392b; }
 
-        .rating-desc {
-            font-size: 12px;
-            color: var(--text-dim);
-            margin-top: 4px;
-            line-height: 1.6;
-        }
+/* ── RATING ── */
+.rating-box {
+    background: #f0e0c0; border: 2px solid #b8650a;
+    border-radius: 4px; padding: 20px 22px;
+    display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px;
+}
 
-        /* BREAKDOWN TABLE */
-        .breakdown {
-            margin-top: 16px;
-        }
+@media (max-width: 640px) { .rating-box { flex-direction: column; } }
 
-        .breakdown-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 12px;
-        }
+.rating-icon { font-size: 40px; flex-shrink: 0; line-height: 1; }
+.rating-rank { font-family: 'Black Ops One', cursive; font-size: 17px; color: #b8650a; letter-spacing: 0.08em; margin-bottom: 5px; }
+.rating-text { font-size: 12px; color: #3d352a; line-height: 1.7; }
 
-        .breakdown-row:last-child { border-bottom: none; }
+/* ── BTN ── */
+.btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 10px 20px; border-radius: 3px; border: 1.5px solid;
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
 
-        .breakdown-label { color: var(--text-dim); }
-        .breakdown-value { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.05em; }
+.btn-primary   { background: #1a1612; color: #f5f0e8; border-color: #1a1612; }
+.btn-primary:hover { background: #3d352a; }
+.btn-secondary { background: transparent; color: #1a1612; border-color: #c8bfb0; }
+.btn-secondary:hover { border-color: #1a1612; }
+.btn-danger    { background: transparent; color: #c0392b; border-color: #c0392b; }
+.btn-danger:hover { background: #c0392b; color: #fff; }
+.btn-green     { background: #2d6a4f; color: #fff; border-color: #2d6a4f; }
+.btn-green:hover { background: #245940; }
 
-        /* PROGRESS BAR */
-        .progress-wrap {
-            margin-top: 12px;
-        }
+/* ── PROGRESS LOG ── */
+.log-controls {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    align-items: center; margin-bottom: 16px;
+}
 
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
+.log-date-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: #7a6e62;
+    display: flex; align-items: center; gap: 6px;
+    flex: 1; min-width: 160px;
+}
 
-        .progress-bar {
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            overflow: hidden;
-        }
+.log-date-input {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px; color: #1a1612;
+    background: #ede8de; border: 1.5px solid #c8bfb0;
+    border-radius: 3px; padding: 6px 10px;
+    outline: none;
+}
 
-        .progress-fill {
-            height: 100%;
-            border-radius: 2px;
-            background: linear-gradient(90deg, var(--accent-green), #00ffcc);
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+.log-date-input:focus { border-color: #1a1612; }
 
-        /* DISCLAIMER */
-        .disclaimer {
-            text-align: center;
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 32px;
-            line-height: 1.8;
-            padding: 0 16px;
-        }
-    </style>
+/* ── HISTORY TABLE ── */
+.history-wrap {
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 12px; min-width: 560px;
+}
+
+.history-table th {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #7a6e62;
+    padding: 8px 10px; text-align: left;
+    border-bottom: 2px solid #1a1612;
+    background: #f5f0e8;
+}
+
+.history-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid #ede8de;
+    color: #3d352a; vertical-align: middle;
+}
+
+.history-table tr:hover td { background: #f5f0e8; }
+
+.history-table tr:last-child td { border-bottom: none; }
+
+.history-del {
+    background: none; border: none;
+    color: #c8bfb0; cursor: pointer;
+    font-size: 14px; padding: 2px 6px;
+    border-radius: 3px; transition: color 0.15s;
+}
+
+.history-del:hover { color: #c0392b; }
+
+.badge-up   { color: #2d6a4f; font-family: 'Share Tech Mono', monospace; font-size: 10px; }
+.badge-same { color: #7a6e62; font-family: 'Share Tech Mono', monospace; font-size: 10px; }
+.badge-down { color: #c0392b; font-family: 'Share Tech Mono', monospace; font-size: 10px; }
+
+/* ── CHART ── */
+.chart-wrap {
+    position: relative;
+    height: 180px;
+    margin-top: 8px;
+}
+
+canvas.line-chart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.chart-legend {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: #7a6e62;
+}
+
+.legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+    text-align: center; padding: 40px 20px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; color: #c8bfb0;
+    letter-spacing: 0.1em;
+}
+
+.empty-state-icon { font-size: 36px; margin-bottom: 12px; }
+
+/* ── STREAK ── */
+.streak-row {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px;
+}
+
+.streak-card {
+    flex: 1; min-width: 120px;
+    background: #1a1612; color: #f5f0e8;
+    border-radius: 4px; padding: 14px 16px;
+    text-align: center;
+}
+
+.streak-num {
+    font-family: 'Black Ops One', cursive;
+    font-size: 36px; line-height: 1; color: #ffd580;
+}
+
+.streak-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; letter-spacing: 0.12em;
+    color: rgba(245,240,232,0.5); margin-top: 4px;
+    text-transform: uppercase;
+}
+
+/* ── STORAGE STATUS ── */
+.storage-status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em;
+    padding: 6px 12px; border-radius: 100px;
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-left: auto;
+}
+
+.storage-status.ok   { background: #d0e8dc; color: #2d6a4f; }
+.storage-status.err  { background: #f5e0de; color: #c0392b; }
+.storage-status.load { background: #e0d9cc; color: #7a6e62; }
+
+.status-dot { width: 6px; height: 6px; border-radius: 50%; }
+.status-dot.ok   { background: #2d6a4f; }
+.status-dot.err  { background: #c0392b; }
+.status-dot.load { background: #7a6e62; animation: blink 1s infinite; }
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── FOOTER ── */
+.footer-line {
+    padding-top: 16px;
+    border-top: 1px solid #c8bfb0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: #7a6e62;
+    text-align: center; letter-spacing: 0.08em; line-height: 2;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.page > * { animation: fadeUp 0.35s ease both; }
+.page > *:nth-child(1) { animation-delay: 0.04s; }
+.page > *:nth-child(2) { animation-delay: 0.08s; }
+.page > *:nth-child(3) { animation-delay: 0.12s; }
+</style>
 </head>
 <body>
-    <div class="container">
+<div class="page">
 
-        <header>
-            <p class="header-eyebrow">v2.0 — 資本主義的筋肉経済学</p>
-            <h1 class="header-title">MUSCLE<br><span>FINANCIAL</span><br>ADVISOR</h1>
-            <p class="header-sub">筋肉への投資を、貸借対照表で読み解く</p>
-        </header>
+<!-- ── HEADER ── -->
+<header>
+    <div>
+        <p class="eyebrow">BODYWEIGHT × FINANCE · No Equipment. Maximum ROI.</p>
+        <h1>BODYWEIGHT<br><em>FINANCIAL</em><br>ADVISOR</h1>
+        <p class="tagline">自重トレーニングへの投資を、損益計算書で読み解く</p>
+    </div>
+    <div class="header-badge">ZERO<br>EQUIPMENT<br>STRATEGY<br>──────<br>v4.0</div>
+</header>
 
-        <div class="main-grid">
+<!-- ── TABS ── -->
+<div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('calc')">📊 シミュレーター</button>
+    <button class="tab-btn" onclick="switchTab('log')">📝 トレーニング記録</button>
+    <button class="tab-btn" onclick="switchTab('chart')">📈 成長グラフ</button>
+    <span class="storage-status load" id="storage-status">
+        <span class="status-dot load" id="status-dot"></span>
+        <span id="status-text">接続中...</span>
+    </span>
+</div>
 
-            <!-- 入力：コスト・PL設定 -->
-            <div class="card green-top">
-                <div class="card-label green">【P&L】損益設定</div>
+<!-- ══════════════════════════════════════════
+     TAB 1: シミュレーター
+══════════════════════════════════════════ -->
+<div class="tab-panel active" id="panel-calc">
 
-                <div class="input-group">
-                    <span class="input-label">月間ジム・プロテイン代</span>
-                    <div class="input-row">
-                        <input type="number" id="monthly-cost" value="12000" class="input-field" oninput="calculate()">
-                        <span class="input-unit">円 / 月</span>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <span class="input-label">ベンチプレス目標重量</span>
-                    <div class="input-row">
-                        <input type="number" id="bench-press" value="80" class="input-field" oninput="calculate()">
-                        <span class="input-unit">kg</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 入力：資産・BS設定 -->
-            <div class="card blue-top">
-                <div class="card-label blue">【B/S】資産基礎設定</div>
-
-                <div class="input-group">
-                    <span class="input-label">現在の年齢</span>
-                    <div class="input-row">
-                        <input type="number" id="age" value="30" class="input-field" oninput="calculate()">
-                        <span class="input-unit">歳</span>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <span class="input-label">筋肉増量目標</span>
-                    <div class="input-row">
-                        <input type="number" id="muscle-kg" value="3" class="input-field" oninput="calculate()">
-                        <span class="input-unit">kg</span>
-                    </div>
+    <div class="row2">
+        <div class="card">
+            <div class="card-title">基本設定 — B/S &amp; P/L</div>
+            <div class="field">
+                <span class="field-label">現在の年齢</span>
+                <div class="field-row">
+                    <input type="number" id="age" value="30" class="field-input" oninput="calc()">
+                    <span class="field-unit">歳</span>
                 </div>
             </div>
-
-            <!-- ヒーロー指標：生涯純利益 -->
-            <div class="hero-card">
-                <p class="hero-label">純・生涯マッスル利益（コスト控除後）</p>
-                <div>
-                    <span class="hero-currency" id="hero-currency">¥</span>
-                    <span class="hero-value" id="net-profit">0</span>
-                </div>
-                <p class="hero-sub">健康寿命85歳まで・全コスト差引後</p>
-                <div class="payback-badge">
-                    <div class="payback-badge-dot"></div>
-                    <span class="payback-badge-text">投資回収期間：<span id="payback-period">--</span></span>
+            <div class="field">
+                <span class="field-label">筋肉増量目標</span>
+                <div class="field-row">
+                    <input type="number" id="muscle" value="3" class="field-input" oninput="calc()">
+                    <span class="field-unit">kg</span>
                 </div>
             </div>
-
-            <!-- KPI 指標 -->
-            <div class="card gold-top">
-                <div class="card-label gold">【KPI】能力評価指標</div>
-                <div class="kpi-grid">
-                    <div class="kpi-item">
-                        <div class="kpi-label">年収UPボーナス推計</div>
-                        <div class="kpi-value blue">¥<span id="salary-up">0</span><span class="kpi-unit">/年</span></div>
-                    </div>
-                    <div class="kpi-item">
-                        <div class="kpi-label">1レップあたりの単価</div>
-                        <div class="kpi-value green">¥<span id="rep-value">0</span><span class="kpi-unit">/回</span></div>
-                    </div>
-                    <div class="kpi-item">
-                        <div class="kpi-label">年間グロス利益</div>
-                        <div class="kpi-value gold">¥<span id="gross-annual">0</span><span class="kpi-unit">/年</span></div>
-                    </div>
-                    <div class="kpi-item">
-                        <div class="kpi-label">年間ランニングコスト</div>
-                        <div class="kpi-value red">¥<span id="annual-cost">0</span><span class="kpi-unit">/年</span></div>
-                    </div>
+            <div class="field">
+                <span class="field-label">月間コスト（プロテイン・器具等）</span>
+                <div class="field-row">
+                    <input type="number" id="cost" value="3000" class="field-input" oninput="calc()">
+                    <span class="field-unit">円 / 月</span>
                 </div>
             </div>
-
-            <!-- 損益内訳 -->
-            <div class="card">
-                <div class="card-label">【詳細】損益内訳</div>
-
-                <div class="breakdown">
-                    <div class="breakdown-row">
-                        <span class="breakdown-label">筋肉資産価値（年間）</span>
-                        <span class="breakdown-value" style="color:var(--accent-green)">+¥<span id="b-muscle">0</span></span>
-                    </div>
-                    <div class="breakdown-row">
-                        <span class="breakdown-label">ベンチ相関ボーナス（年間）</span>
-                        <span class="breakdown-value" style="color:var(--accent-blue)">+¥<span id="b-bench">0</span></span>
-                    </div>
-                    <div class="breakdown-row">
-                        <span class="breakdown-label">ランニングコスト（年間）</span>
-                        <span class="breakdown-value" style="color:var(--accent-red)">-¥<span id="b-cost">0</span></span>
-                    </div>
-                    <div class="breakdown-row">
-                        <span class="breakdown-label">投資可能期間</span>
-                        <span class="breakdown-value" style="color:#aaa"><span id="b-years">0</span>年</span>
-                    </div>
-                </div>
-
-                <div class="progress-wrap">
-                    <div class="progress-label">
-                        <span>利益率（収益 vs コスト比）</span>
-                        <span id="profit-ratio">0%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 格付け -->
-            <div class="rating-card">
-                <div class="rating-icon" id="rating-icon">🏋️</div>
-                <div>
-                    <div class="rating-title" id="rating-title">MUSCLE ANALYST</div>
-                    <div class="rating-desc" id="rating-desc">数値を入力してマッスル格付けを取得してください。</div>
-                </div>
-            </div>
-
+            <div class="cost-note" id="cost-note">💡 ジム代ゼロ。自重は最高コスパの投資戦略。</div>
         </div>
 
-        <p class="disclaimer">
-            ※ 本ツールはエンターテインメント目的です。<br>
-            「筋肉1kg＝年間5万円価値」はFPの仮説モデル（基礎代謝向上・医療費削減・生産性UPの合算推計）に基づきます。<br>
-            実際の投資判断には専門家にご相談ください。ただし筋肉は裏切りません。
-        </p>
-
+        <div class="hero">
+            <div class="hero-watermark">¥</div>
+            <div class="hero-eyebrow">純・生涯マッスル利益（全コスト控除後）</div>
+            <div class="hero-number" id="net-profit">¥0</div>
+            <div class="hero-unit">健康寿命85歳まで ／ コスト差引後</div>
+            <div class="payback-row">
+                <span class="payback-label">投資回収期間</span>
+                <span class="payback-pill" id="payback">──</span>
+            </div>
+        </div>
     </div>
 
-    <script>
-        function fmt(n) {
-            return Math.abs(Math.round(n)).toLocaleString('ja-JP');
+    <div class="card mb16">
+        <div class="card-title">自重トレーニング — 三種目パフォーマンス入力</div>
+        <div class="row3" style="margin-bottom:0;">
+
+            <div class="ex-card">
+                <div class="ex-header">
+                    <div class="ex-icon">🦵</div>
+                    <div>
+                        <div class="ex-name-ja">スクワット</div>
+                        <div class="ex-name-en">Squat — King of Exercise</div>
+                    </div>
+                </div>
+                <div class="ex-target">下半身全体 · 基礎代謝UP最大化</div>
+                <div class="ex-tip">足を肩幅に開き、お尻を後ろに引くように腰を下ろす。膝がつま先より前に出すぎないよう意識する。</div>
+                <div class="ex-goal">目安：<span>15〜20回 × 3セット</span></div>
+                <div class="ex-input-row">
+                    <input type="number" id="squat" value="15" class="ex-input" oninput="calc()">
+                    <span class="ex-unit">回 / set</span>
+                </div>
+                <div class="ex-bonus" id="squat-bonus">＋¥0 /年</div>
+            </div>
+
+            <div class="ex-card">
+                <div class="ex-header">
+                    <div class="ex-icon">💪</div>
+                    <div>
+                        <div class="ex-name-ja">プッシュアップ</div>
+                        <div class="ex-name-en">Push-up — Upper Body Core</div>
+                    </div>
+                </div>
+                <div class="ex-target">胸（大胸筋）· 腕 · 体幹 同時刺激</div>
+                <div class="ex-tip">頭からかかとまで一直線をキープ。きつい場合は膝をついた状態でも十分効果あり。大胸筋を意識して胸で押す感覚で行う。</div>
+                <div class="ex-goal">目安：<span>10〜15回 × 3セット</span></div>
+                <div class="ex-input-row">
+                    <input type="number" id="pushup" value="10" class="ex-input" oninput="calc()">
+                    <span class="ex-unit">回 / set</span>
+                </div>
+                <div class="ex-bonus" id="pushup-bonus">＋¥0 /年</div>
+            </div>
+
+            <div class="ex-card">
+                <div class="ex-header">
+                    <div class="ex-icon">🧱</div>
+                    <div>
+                        <div class="ex-name-ja">プランク</div>
+                        <div class="ex-name-en">Plank — Inner Muscle</div>
+                    </div>
+                </div>
+                <div class="ex-target">体幹 · 姿勢改善 · インナーマッスル強化</div>
+                <div class="ex-tip">前腕とつま先で体を支え、腰が反ったり浮いたりしないよう耐える。呼吸を止めないことが最重要。</div>
+                <div class="ex-goal">目安：<span>30〜60秒 × 3セット</span></div>
+                <div class="ex-input-row">
+                    <input type="number" id="plank" value="30" class="ex-input" oninput="calc()">
+                    <span class="ex-unit">秒 / set</span>
+                </div>
+                <div class="ex-bonus" id="plank-bonus">＋¥0 /年</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row3">
+        <div class="kpi">
+            <div class="kpi-label">年間グロス利益</div>
+            <div class="kpi-val green">¥<span id="gross">0</span></div>
+            <div class="kpi-sub">総収益 / 年</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">年間コスト</div>
+            <div class="kpi-val red">¥<span id="annual-cost">0</span></div>
+            <div class="kpi-sub">総支出 / 年</div>
+        </div>
+        <div class="kpi">
+            <div class="kpi-label">1動作あたり単価</div>
+            <div class="kpi-val amber">¥<span id="rep-val">0</span></div>
+            <div class="kpi-sub">年3,000動作換算</div>
+        </div>
+    </div>
+
+    <div class="row2kpi">
+        <div class="card">
+            <div class="card-title">損益内訳</div>
+            <table class="breakdown-table">
+                <tr><td>筋肉資産価値（年間）</td><td class="t-green">+¥<span id="b-muscle">0</span></td></tr>
+                <tr><td>スクワット 能力ボーナス</td><td class="t-blue">+¥<span id="b-squat">0</span></td></tr>
+                <tr><td>プッシュアップ 能力ボーナス</td><td class="t-blue">+¥<span id="b-push">0</span></td></tr>
+                <tr><td>プランク 能力ボーナス</td><td class="t-blue">+¥<span id="b-plank">0</span></td></tr>
+                <tr><td>ランニングコスト（年間）</td><td class="t-red">−¥<span id="b-cost">0</span></td></tr>
+                <tr><td>残存投資期間</td><td><span id="b-years">0</span>年</td></tr>
+                <tr class="total-row"><td>生涯純利益</td><td>¥<span id="b-total">0</span></td></tr>
+            </table>
+        </div>
+        <div class="card">
+            <div class="card-title">利益率 &amp; 達成度</div>
+            <div class="bar-head"><span>収益 vs コスト比率</span><span id="ratio-label">0%</span></div>
+            <div class="bar-track"><div class="bar-fill" id="bar-fill" style="width:0%"></div></div>
+            <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
+                <div>
+                    <div class="bar-head" style="margin-bottom:4px;"><span>スクワット（目標20回）</span><span id="sq-pct">0%</span></div>
+                    <div class="bar-track"><div class="bar-fill" id="sq-bar" style="width:0%; background:#1a4a7a;"></div></div>
+                </div>
+                <div>
+                    <div class="bar-head" style="margin-bottom:4px;"><span>プッシュアップ（目標15回）</span><span id="pu-pct">0%</span></div>
+                    <div class="bar-track"><div class="bar-fill" id="pu-bar" style="width:0%; background:#b8650a;"></div></div>
+                </div>
+                <div>
+                    <div class="bar-head" style="margin-bottom:4px;"><span>プランク（目標60秒）</span><span id="pl-pct">0%</span></div>
+                    <div class="bar-track"><div class="bar-fill" id="pl-bar" style="width:0%; background:#2d6a4f;"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rating-box">
+        <div class="rating-icon" id="r-icon">🏃</div>
+        <div>
+            <div class="rating-rank" id="r-rank">CALCULATING...</div>
+            <div class="rating-text" id="r-text">数値を入力してマッスル格付けを取得してください。</div>
+        </div>
+    </div>
+
+</div><!-- /panel-calc -->
+
+<!-- ══════════════════════════════════════════
+     TAB 2: トレーニング記録
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-log">
+
+    <div class="streak-row" id="streak-row">
+        <div class="streak-card">
+            <div class="streak-num" id="streak-total">0</div>
+            <div class="streak-label">総記録日数</div>
+        </div>
+        <div class="streak-card">
+            <div class="streak-num" id="streak-week">0</div>
+            <div class="streak-label">今週のトレーニング</div>
+        </div>
+        <div class="streak-card">
+            <div class="streak-num" id="streak-best-sq">0</div>
+            <div class="streak-label">スクワット 自己ベスト</div>
+        </div>
+        <div class="streak-card">
+            <div class="streak-num" id="streak-best-pu">0</div>
+            <div class="streak-label">プッシュアップ 自己ベスト</div>
+        </div>
+        <div class="streak-card">
+            <div class="streak-num" id="streak-best-pl">0</div>
+            <div class="streak-label">プランク 最長(秒)</div>
+        </div>
+    </div>
+
+    <div class="card mb16">
+        <div class="card-title">記録を追加</div>
+        <div class="log-controls">
+            <div class="log-date-label">
+                日付：
+                <input type="date" id="log-date" class="log-date-input">
+            </div>
+        </div>
+        <div class="row3" style="margin-bottom:16px;">
+            <div>
+                <span class="field-label">🦵 スクワット（回）</span>
+                <div class="field-row">
+                    <input type="number" id="log-squat" value="15" class="field-input" style="font-size:20px;">
+                    <span class="field-unit">回</span>
+                </div>
+            </div>
+            <div>
+                <span class="field-label">💪 プッシュアップ（回）</span>
+                <div class="field-row">
+                    <input type="number" id="log-pushup" value="10" class="field-input" style="font-size:20px;">
+                    <span class="field-unit">回</span>
+                </div>
+            </div>
+            <div>
+                <span class="field-label">🧱 プランク（秒）</span>
+                <div class="field-row">
+                    <input type="number" id="log-plank" value="30" class="field-input" style="font-size:20px;">
+                    <span class="field-unit">秒</span>
+                </div>
+            </div>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="saveLog()">✚ この記録を保存</button>
+            <div id="save-msg" style="font-family:'Share Tech Mono',monospace; font-size:11px; color:#2d6a4f; display:flex; align-items:center;"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">記録履歴</div>
+        <div class="history-wrap">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>日付</th>
+                        <th>🦵 スクワット</th>
+                        <th>💪 プッシュアップ</th>
+                        <th>🧱 プランク</th>
+                        <th>前回比</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="history-body">
+                    <tr><td colspan="6"><div class="empty-state"><div class="empty-state-icon">📋</div>まだ記録がありません。<br>上のフォームから最初のトレーニングを記録しよう。</div></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div><!-- /panel-log -->
+
+<!-- ══════════════════════════════════════════
+     TAB 3: 成長グラフ
+══════════════════════════════════════════ -->
+<div class="tab-panel" id="panel-chart">
+
+    <div class="card mb16">
+        <div class="card-title">スクワット 成長推移</div>
+        <div class="chart-wrap"><canvas id="chart-squat"></canvas></div>
+    </div>
+
+    <div class="row2">
+        <div class="card mb16">
+            <div class="card-title">プッシュアップ 成長推移</div>
+            <div class="chart-wrap" style="height:140px;"><canvas id="chart-pushup"></canvas></div>
+        </div>
+        <div class="card mb16">
+            <div class="card-title">プランク 成長推移（秒）</div>
+            <div class="chart-wrap" style="height:140px;"><canvas id="chart-plank"></canvas></div>
+        </div>
+    </div>
+
+    <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#1a4a7a;"></div>スクワット</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#b8650a;"></div>プッシュアップ</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#2d6a4f;"></div>プランク</div>
+    </div>
+
+    <div style="margin-top:24px; text-align:right;">
+        <button class="btn btn-danger" onclick="clearAllData()">🗑 全記録を削除</button>
+    </div>
+
+</div><!-- /panel-chart -->
+
+<div class="footer-line" style="margin-top:24px;">
+    ※ 本ツールはエンターテインメント目的のFP仮説モデルです。<br>
+    「筋肉1kg＝年間5万円価値」は基礎代謝向上・医療費削減・生産性UPの合算推計。<br>
+    スクワット・プッシュアップ・プランクの三種目で、人体という最高の資産を育てよう。
+</div>
+
+</div><!-- /page -->
+
+<script>
+/* ═══════════════════════════════════════════
+   STORAGE HELPERS
+═══════════════════════════════════════════ */
+const STORAGE_KEY = 'bw-training-log';
+let logs = [];  // [{date, squat, pushup, plank}]
+
+function setStorageStatus(state, text) {
+    const el  = document.getElementById('storage-status');
+    const dot = document.getElementById('status-dot');
+    const txt = document.getElementById('status-text');
+    el.className  = `storage-status ${state}`;
+    dot.className = `status-dot ${state}`;
+    txt.textContent = text;
+}
+
+async function loadFromStorage() {
+    setStorageStatus('load', '読込中...');
+    try {
+        const res = await window.storage.get(STORAGE_KEY);
+        if (res && res.value) {
+            logs = JSON.parse(res.value);
         }
+        setStorageStatus('ok', '保存済み');
+    } catch (e) {
+        // key not found = first time use
+        logs = [];
+        setStorageStatus('ok', '新規データ');
+    }
+    renderLog();
+    renderCharts();
+    updateStreaks();
+}
 
-        function calculate() {
-            const age         = parseFloat(document.getElementById('age').value)         || 0;
-            const muscleKg    = parseFloat(document.getElementById('muscle-kg').value)    || 0;
-            const monthlyCost = parseFloat(document.getElementById('monthly-cost').value) || 0;
-            const benchKg     = parseFloat(document.getElementById('bench-press').value)  || 0;
+async function saveToStorage() {
+    setStorageStatus('load', '保存中...');
+    try {
+        await window.storage.set(STORAGE_KEY, JSON.stringify(logs));
+        setStorageStatus('ok', `${logs.length}件 保存済み`);
+    } catch (e) {
+        setStorageStatus('err', '保存失敗');
+    }
+}
 
-            const healthYears = Math.max(0, 85 - age);
+/* ═══════════════════════════════════════════
+   LOG CRUD
+═══════════════════════════════════════════ */
+function saveLog() {
+    const date   = document.getElementById('log-date').value;
+    const squat  = parseFloat(document.getElementById('log-squat').value)  || 0;
+    const pushup = parseFloat(document.getElementById('log-pushup').value) || 0;
+    const plank  = parseFloat(document.getElementById('log-plank').value)  || 0;
 
-            // 収益計算
-            const muscleAnnual   = muscleKg * 50000;                             // 1kg = 5万円/年
-            const benchBonus     = Math.max(0, benchKg - 60) * 1000;             // 60kg超：1kg=1000円/年
-            const grossAnnual    = muscleAnnual + benchBonus;
+    if (!date) { alert('日付を選択してください。'); return; }
 
-            // コスト計算
-            const annualCost     = monthlyCost * 12;
-            const netAnnual      = grossAnnual - annualCost;
+    // 同日があれば上書き
+    const idx = logs.findIndex(l => l.date === date);
+    const entry = { date, squat, pushup, plank };
+    if (idx >= 0) {
+        logs[idx] = entry;
+    } else {
+        logs.push(entry);
+        logs.sort((a,b) => a.date.localeCompare(b.date));
+    }
 
-            // 生涯利益
-            const lifetimeNet    = netAnnual * healthYears;
+    saveToStorage();
+    renderLog();
+    renderCharts();
+    updateStreaks();
 
-            // 投資回収期間
-            const monthlyGross   = grossAnnual / 12;
-            let paybackText;
-            if (monthlyCost <= 0) {
-                paybackText = "コスト0 — 即回収";
-            } else if (monthlyGross <= monthlyCost) {
-                paybackText = "回収不能（コスト過多）";
-            } else {
-                const months = monthlyCost / (monthlyGross - monthlyCost);
-                if (months < 1) {
-                    paybackText = `約${(months * 30).toFixed(0)}日で回収完了`;
-                } else {
-                    paybackText = `約${months.toFixed(1)}ヶ月で回収完了`;
-                }
-            }
+    const msg = document.getElementById('save-msg');
+    msg.textContent = '✔ 保存しました';
+    setTimeout(() => { msg.textContent = ''; }, 2000);
+}
 
-            // 1レップ換算（年3000レップ想定）
-            const repValue = grossAnnual > 0 ? (grossAnnual / 3000) : 0;
+function deleteLog(date) {
+    if (!confirm(`${date} の記録を削除しますか？`)) return;
+    logs = logs.filter(l => l.date !== date);
+    saveToStorage();
+    renderLog();
+    renderCharts();
+    updateStreaks();
+}
 
-            // 利益率
-            const ratio = annualCost > 0 ? Math.min(100, Math.max(0, (netAnnual / grossAnnual) * 100)) : 100;
+async function clearAllData() {
+    if (!confirm('全ての記録を削除しますか？この操作は取り消せません。')) return;
+    logs = [];
+    try {
+        await window.storage.delete(STORAGE_KEY);
+        setStorageStatus('ok', '新規データ');
+    } catch(e) {}
+    renderLog();
+    renderCharts();
+    updateStreaks();
+}
 
-            // --- DOM更新 ---
-            const heroVal  = document.getElementById('net-profit');
-            const heroCur  = document.getElementById('hero-currency');
+/* ═══════════════════════════════════════════
+   RENDER HISTORY TABLE
+═══════════════════════════════════════════ */
+function renderLog() {
+    const tbody = document.getElementById('history-body');
+    if (logs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-state-icon">📋</div>まだ記録がありません。<br>上のフォームから最初のトレーニングを記録しよう。</div></td></tr>`;
+        return;
+    }
 
-            heroVal.innerText = fmt(lifetimeNet);
-            if (lifetimeNet < 0) {
-                heroVal.classList.add('negative');
-                heroCur.classList.add('negative');
-            } else {
-                heroVal.classList.remove('negative');
-                heroCur.classList.remove('negative');
-            }
+    // 新しい順に表示
+    const sorted = [...logs].reverse();
 
-            document.getElementById('payback-period').innerText = paybackText;
-            document.getElementById('salary-up').innerText      = fmt(benchBonus);
-            document.getElementById('rep-value').innerText      = repValue.toFixed(1);
-            document.getElementById('gross-annual').innerText   = fmt(grossAnnual);
-            document.getElementById('annual-cost').innerText    = fmt(annualCost);
+    tbody.innerHTML = sorted.map((entry, i) => {
+        const prev = sorted[i + 1];
+        const diff = prev ? diffBadge(entry, prev) : '<span class="badge-same">—</span>';
+        return `<tr>
+            <td><strong>${entry.date}</strong></td>
+            <td><span style="font-family:'Black Ops One',cursive;font-size:16px;">${entry.squat}</span> 回</td>
+            <td><span style="font-family:'Black Ops One',cursive;font-size:16px;">${entry.pushup}</span> 回</td>
+            <td><span style="font-family:'Black Ops One',cursive;font-size:16px;">${entry.plank}</span> 秒</td>
+            <td>${diff}</td>
+            <td><button class="history-del" onclick="deleteLog('${entry.date}')" title="削除">✕</button></td>
+        </tr>`;
+    }).join('');
+}
 
-            document.getElementById('b-muscle').innerText  = fmt(muscleAnnual);
-            document.getElementById('b-bench').innerText   = fmt(benchBonus);
-            document.getElementById('b-cost').innerText    = fmt(annualCost);
-            document.getElementById('b-years').innerText   = healthYears;
-            document.getElementById('profit-ratio').innerText = ratio.toFixed(0) + '%';
-            document.getElementById('progress-fill').style.width = ratio + '%';
+function diffBadge(curr, prev) {
+    const dSq = curr.squat  - prev.squat;
+    const dPu = curr.pushup - prev.pushup;
+    const dPl = curr.plank  - prev.plank;
+    const parts = [];
+    if (dSq !== 0) parts.push(`<span class="${dSq>0?'badge-up':'badge-down'}">SQ${dSq>0?'+':''}${dSq}</span>`);
+    if (dPu !== 0) parts.push(`<span class="${dPu>0?'badge-up':'badge-down'}">PU${dPu>0?'+':''}${dPu}</span>`);
+    if (dPl !== 0) parts.push(`<span class="${dPl>0?'badge-up':'badge-down'}">PL${dPl>0?'+':''}${dPl}s</span>`);
+    return parts.length ? parts.join(' ') : '<span class="badge-same">変化なし</span>';
+}
 
-            // 格付けロジック
-            const { icon, title, desc } = getRating(lifetimeNet, ratio, benchKg, healthYears);
-            document.getElementById('rating-icon').innerText = icon;
-            document.getElementById('rating-title').innerText = title;
-            document.getElementById('rating-desc').innerText = desc;
+/* ═══════════════════════════════════════════
+   STREAKS & BESTS
+═══════════════════════════════════════════ */
+function updateStreaks() {
+    document.getElementById('streak-total').textContent = logs.length;
+
+    // 今週
+    const now  = new Date();
+    const mon  = new Date(now);
+    mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+    const weekStart = mon.toISOString().slice(0,10);
+    const weekCount = logs.filter(l => l.date >= weekStart).length;
+    document.getElementById('streak-week').textContent = weekCount;
+
+    // ベスト
+    if (logs.length > 0) {
+        document.getElementById('streak-best-sq').textContent = Math.max(...logs.map(l=>l.squat));
+        document.getElementById('streak-best-pu').textContent = Math.max(...logs.map(l=>l.pushup));
+        document.getElementById('streak-best-pl').textContent = Math.max(...logs.map(l=>l.plank));
+    } else {
+        document.getElementById('streak-best-sq').textContent = '—';
+        document.getElementById('streak-best-pu').textContent = '—';
+        document.getElementById('streak-best-pl').textContent = '—';
+    }
+}
+
+/* ═══════════════════════════════════════════
+   CHARTS (vanilla canvas)
+═══════════════════════════════════════════ */
+function renderCharts() {
+    drawChart('chart-squat',  logs.map(l=>l.date), logs.map(l=>l.squat),  '#1a4a7a', 20);
+    drawChart('chart-pushup', logs.map(l=>l.date), logs.map(l=>l.pushup), '#b8650a', 15);
+    drawChart('chart-plank',  logs.map(l=>l.date), logs.map(l=>l.plank),  '#2d6a4f', 60);
+}
+
+function drawChart(canvasId, labels, data, color, target) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    // HiDPI
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width  = rect.width  * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    const W = rect.width;
+    const H = rect.height;
+
+    ctx.clearRect(0, 0, W, H);
+
+    const PAD = { top: 16, right: 16, bottom: 30, left: 40 };
+    const cW = W - PAD.left - PAD.right;
+    const cH = H - PAD.top  - PAD.bottom;
+
+    // empty state
+    if (data.length === 0) {
+        ctx.fillStyle = '#c8bfb0';
+        ctx.font = '11px Share Tech Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('記録を追加するとグラフが表示されます', W/2, H/2);
+        return;
+    }
+
+    const maxVal = Math.max(...data, target) * 1.15;
+    const minVal = 0;
+    const range  = maxVal - minVal || 1;
+
+    const xStep = data.length > 1 ? cW / (data.length - 1) : cW / 2;
+
+    const toX = (i)   => PAD.left + (data.length > 1 ? i * xStep : cW / 2);
+    const toY = (val) => PAD.top  + cH - ((val - minVal) / range) * cH;
+
+    // grid lines
+    ctx.strokeStyle = '#e0d9cc';
+    ctx.lineWidth = 1;
+    for (let g = 0; g <= 4; g++) {
+        const y = PAD.top + (cH / 4) * g;
+        ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + cW, y); ctx.stroke();
+        const val = Math.round(maxVal - (maxVal / 4) * g);
+        ctx.fillStyle = '#a09488';
+        ctx.font = `9px Share Tech Mono, monospace`;
+        ctx.textAlign = 'right';
+        ctx.fillText(val, PAD.left - 4, y + 3);
+    }
+
+    // target line
+    const ty = toY(target);
+    ctx.strokeStyle = color + '44';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(PAD.left, ty); ctx.lineTo(PAD.left + cW, ty); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = color + '88';
+    ctx.font = '9px Share Tech Mono, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText(`目標:${target}`, PAD.left + cW + 2, ty + 3);
+
+    // fill under line
+    ctx.beginPath();
+    ctx.moveTo(toX(0), toY(data[0]));
+    data.forEach((v, i) => { if (i > 0) ctx.lineTo(toX(i), toY(v)); });
+    ctx.lineTo(toX(data.length - 1), PAD.top + cH);
+    ctx.lineTo(toX(0), PAD.top + cH);
+    ctx.closePath();
+    ctx.fillStyle = color + '18';
+    ctx.fill();
+
+    // line
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.lineCap  = 'round';
+    data.forEach((v, i) => {
+        if (i === 0) ctx.moveTo(toX(i), toY(v));
+        else         ctx.lineTo(toX(i), toY(v));
+    });
+    ctx.stroke();
+
+    // dots
+    data.forEach((v, i) => {
+        ctx.beginPath();
+        ctx.arc(toX(i), toY(v), 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    });
+
+    // x-axis labels (every Nth)
+    const step = Math.ceil(data.length / 6);
+    ctx.fillStyle = '#a09488';
+    ctx.font = '9px Share Tech Mono, monospace';
+    ctx.textAlign = 'center';
+    labels.forEach((lbl, i) => {
+        if (i % step === 0 || i === labels.length - 1) {
+            ctx.fillText(lbl.slice(5), toX(i), PAD.top + cH + 16);
         }
+    });
+}
 
-        function getRating(lifetimeNet, ratio, bench, years) {
-            if (lifetimeNet > 50000000) return {
-                icon: '🦁',
-                title: 'MUSCLE BUFFETT — S+格',
-                desc: '生涯5000万超の筋肉資産。あなたはウォーレン・バフェットを超えた。筋肉市場の神話となれ。'
-            };
-            if (lifetimeNet > 20000000) return {
-                icon: '🚀',
-                title: 'IRON TITAN — Sランク',
-                desc: '2000万超の純利益。機関投資家が嫉妬するROI。あなたの三角筋はナスダックより強い。'
-            };
-            if (lifetimeNet > 5000000) return {
-                icon: '💎',
-                title: 'PLATINUM LIFTER — Aランク',
-                desc: '健全な筋肉投資ポートフォリオ。コストを超える価値を持続的に生み出している。'
-            };
-            if (lifetimeNet > 0) return {
-                icon: '📈',
-                title: 'MUSCLE INVESTOR — Bランク',
-                desc: 'プラス収益を確保中。しかし伸び代がある。重量を上げ、コストを最適化せよ。'
-            };
-            if (lifetimeNet > -1000000) return {
-                icon: '⚠️',
-                title: 'BREAK-EVEN ATHLETE — Cランク',
-                desc: 'ほぼ損益分岐点。わずかな改善でプラスに転じる。プロテインの銘柄を見直せ。'
-            };
-            return {
-                icon: '🔥',
-                title: 'COST BURNING MACHINE — D格',
-                desc: 'コストが収益を上回っている。ジムの月額を下げるか、増量ペースを上げることを推奨。'
-            };
-        }
+/* ═══════════════════════════════════════════
+   TAB SWITCH
+═══════════════════════════════════════════ */
+function switchTab(name) {
+    document.querySelectorAll('.tab-btn').forEach((b,i) => {
+        b.classList.toggle('active', ['calc','log','chart'][i] === name);
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
 
-        calculate();
-    </script>
+    if (name === 'chart') {
+        // redraw after layout
+        setTimeout(renderCharts, 50);
+    }
+}
+
+/* ═══════════════════════════════════════════
+   SIMULATOR CALC
+═══════════════════════════════════════════ */
+function fmt(n) { return Math.round(Math.abs(n)).toLocaleString('ja-JP'); }
+function pct(v, t) { return Math.min(100, Math.round((v/t)*100)); }
+
+function calc() {
+    const age    = parseFloat(document.getElementById('age').value)    || 0;
+    const muscle = parseFloat(document.getElementById('muscle').value) || 0;
+    const cost   = parseFloat(document.getElementById('cost').value)   || 0;
+    const squat  = parseFloat(document.getElementById('squat').value)  || 0;
+    const pushup = parseFloat(document.getElementById('pushup').value) || 0;
+    const plank  = parseFloat(document.getElementById('plank').value)  || 0;
+
+    const years = Math.max(0, 85 - age);
+    const muscleAnnual = muscle * 50000;
+    const squatBonus   = Math.max(0, squat  - 15) * 500;
+    const pushupBonus  = Math.max(0, pushup - 10) * 400;
+    const plankBonus   = Math.max(0, plank  - 30) * 30;
+    const grossAnnual  = muscleAnnual + squatBonus + pushupBonus + plankBonus;
+    const annualCost   = cost * 12;
+    const netAnnual    = grossAnnual - annualCost;
+    const lifetimeNet  = netAnnual * years;
+    const repVal       = grossAnnual > 0 ? grossAnnual / 3000 : 0;
+
+    const monthlyGross = grossAnnual / 12;
+    let paybackText;
+    if (cost <= 0)                     paybackText = '即時回収（コスト ¥0）';
+    else if (monthlyGross <= cost)      paybackText = '回収不能 ── 回数UP！';
+    else {
+        const m = cost / (monthlyGross - cost);
+        paybackText = m < 1 ? `約${Math.round(m*30)}日で回収` : `約${m.toFixed(1)}ヶ月で回収`;
+    }
+
+    const ratio = grossAnnual > 0 ? Math.min(100, Math.max(0, (netAnnual/grossAnnual)*100)) : 0;
+    const sqPct = pct(squat, 20), puPct = pct(pushup, 15), plPct = pct(plank, 60);
+
+    const noteEl = document.getElementById('cost-note');
+    if (cost === 0)       noteEl.textContent = '💡 コストゼロ運用中。自重トレは究極の無コスト投資。';
+    else if (cost < 5000) noteEl.textContent = `💡 月${cost.toLocaleString()}円。最小コスト運用。理想的な利益率です。`;
+    else                  noteEl.textContent = `📦 月${cost.toLocaleString()}円。積極投資フェーズ。回収期間を要チェック。`;
+
+    const heroEl = document.getElementById('net-profit');
+    heroEl.textContent = (lifetimeNet < 0 ? '−¥' : '¥') + fmt(lifetimeNet);
+    heroEl.className   = 'hero-number' + (lifetimeNet < 0 ? ' loss' : lifetimeNet > 1000000 ? ' gain' : '');
+
+    document.getElementById('payback').textContent      = paybackText;
+    document.getElementById('gross').textContent        = fmt(grossAnnual);
+    document.getElementById('annual-cost').textContent  = fmt(annualCost);
+    document.getElementById('rep-val').textContent      = repVal.toFixed(1);
+    document.getElementById('ratio-label').textContent  = ratio.toFixed(0) + '%';
+
+    const bar = document.getElementById('bar-fill');
+    bar.style.width = ratio + '%';
+    bar.className   = 'bar-fill' + (ratio < 20 ? ' danger' : '');
+
+    document.getElementById('squat-bonus').textContent  = `＋¥${fmt(squatBonus)} /年`;
+    document.getElementById('pushup-bonus').textContent = `＋¥${fmt(pushupBonus)} /年`;
+    document.getElementById('plank-bonus').textContent  = `＋¥${fmt(plankBonus)} /年`;
+
+    document.getElementById('b-muscle').textContent = fmt(muscleAnnual);
+    document.getElementById('b-squat').textContent  = fmt(squatBonus);
+    document.getElementById('b-push').textContent   = fmt(pushupBonus);
+    document.getElementById('b-plank').textContent  = fmt(plankBonus);
+    document.getElementById('b-cost').textContent   = fmt(annualCost);
+    document.getElementById('b-years').textContent  = years;
+    document.getElementById('b-total').textContent  = (lifetimeNet < 0 ? '−' : '') + fmt(lifetimeNet);
+
+    document.getElementById('sq-pct').textContent = sqPct + '%';
+    document.getElementById('pu-pct').textContent = puPct + '%';
+    document.getElementById('pl-pct').textContent = plPct + '%';
+    document.getElementById('sq-bar').style.width = sqPct + '%';
+    document.getElementById('pu-bar').style.width = puPct + '%';
+    document.getElementById('pl-bar').style.width = plPct + '%';
+
+    const { icon, rank, text } = getRating(lifetimeNet, squat, pushup, plank);
+    document.getElementById('r-icon').textContent = icon;
+    document.getElementById('r-rank').textContent = rank;
+    document.getElementById('r-text').textContent = text;
+}
+
+function getRating(net, squat, pushup, plank) {
+    const elite = squat >= 20 && pushup >= 15 && plank >= 60;
+    const good  = squat >= 15 && pushup >= 10 && plank >= 30;
+    if (net > 30000000 && elite) return { icon: '👑', rank: 'IRON SOVEREIGN — S+ 格外', text: '三種目すべて目安上限クリア＋生涯3000万超。スクワット20回・プッシュアップ15回・プランク60秒の黄金三角形を完成させた者。人体資産運用の頂点に立つ。' };
+    if (net > 15000000)          return { icon: '🔱', rank: 'CORE TITAN — Sランク',     text: '生涯1500万超の純利益。器具なしでここまで積み上げた体幹資産は、どんな金融商品より安定している。' };
+    if (net > 5000000 && good)   return { icon: '💎', rank: 'BODY ARCHITECT — Aランク', text: '三種目すべて目安下限クリア。スクワットで代謝を上げ、プッシュアップで上半身を固め、プランクで体幹が安定。' };
+    if (net > 0)                 return { icon: '📈', rank: 'CALISTHENICS INVESTOR — Bランク', text: 'プラス収益を確保中。次の目標：スクワット20回・プッシュアップ15回・プランク60秒。' };
+    if (pushup < 5 && plank < 15) return { icon: '🌱', rank: 'SEEDLING ASSET — Cランク', text: 'まだ資産形成フェーズ。まずはプランク30秒をファーストマイルストーンに。' };
+    return { icon: '⚡', rank: 'BREAK-EVEN BODY — Dランク', text: 'コストが収益をわずかに上回っている。スクワット15回・プッシュアップ10回の目安下限を達成せよ。' };
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+// 今日の日付をデフォルト設定
+document.getElementById('log-date').value = new Date().toISOString().slice(0, 10);
+
+calc();
+loadFromStorage();
+
+// チャートはリサイズで再描画
+window.addEventListener('resize', () => {
+    if (document.getElementById('panel-chart').classList.contains('active')) {
+        renderCharts();
+    }
+});
+</script>
 </body>
 </html>
